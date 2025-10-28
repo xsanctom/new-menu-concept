@@ -1,0 +1,986 @@
+/* Edit Menu Item Modal */
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 24px;
+}
+
+.edit-modal-container {
+  background: var(--surface);
+  border-radius: 8px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  width: 988px;
+  max-width: 988px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.3s ease-out;
+  overflow: hidden;
+}
+
+/* Header */
+.edit-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.edit-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.edit-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-subtle);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.edit-modal-close:hover {
+  color: var(--text);
+}
+
+.edit-modal-title {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text);
+  margin: 0;
+}
+
+/* Tab Navigation */
+.edit-modal-tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  height: 48px;
+  padding: 0 24px;
+  gap: 8px;
+}
+
+.edit-tab {
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0 16px;
+  height: 48px;
+  color: var(--text-subtle);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.edit-tab:hover {
+  color: var(--text);
+}
+
+.edit-tab.active {
+  color: var(--brand-primary);
+}
+
+.edit-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--brand-primary);
+}
+
+/* Body Wrapper - Two Column Layout */
+.edit-modal-body-wrapper {
+  display: grid;
+  grid-template-columns: 600px 300px;
+  gap: 24px;
+  flex: 1;
+  overflow: auto;
+  padding: 24px;
+}
+
+/* Left Column: Form Content */
+.edit-modal-body {
+  width: 600px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Panel Containers (Form, Availability, Price) */
+.menu-item-form-panel,
+.availability-section,
+.price-tax-section {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: visible;
+}
+
+/* Section Headers */
+.section-header {
+  background-color: var(--surface-raised);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 16px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.section-header-collapsible {
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.section-header-collapsible:hover {
+  background-color: var(--surface-hover);
+}
+
+.section-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.section-description {
+  font-size: 14px;
+  color: var(--text-subtle);
+  margin: 0;
+}
+
+/* Section Content */
+.section-content {
+  padding: 16px;
+}
+
+.menu-item-form-content {
+  padding: 16px;
+  gap: 24px;
+}
+
+/* Scoped overrides to avoid global conflicts and clipping inside modal */
+.edit-modal-container .menu-item-form-panel {
+  background: var(--surface);
+  overflow: visible;
+}
+
+.edit-modal-container .section-header {
+  padding: 12px 16px;
+  min-height: 48px;
+}
+
+.edit-modal-container .section-header.section-header-collapsible {
+  padding: 12px 16px;
+}
+
+.edit-modal-container .menu-item-form-content {
+  padding: 16px;
+  flex: initial;
+  height: auto;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Form Divider */
+.form-divider {
+  height: 1px;
+  background-color: var(--border);
+  margin: 16px 0;
+}
+
+/* Form Fields */
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field:last-child {
+  margin-bottom: 0;
+}
+
+.form-field-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.form-field-row .form-field {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+/* Remove margin-bottom from form-field when inside flex container */
+.menu-item-form-content .form-field {
+  margin-bottom: 0;
+}
+
+.menu-item-form-content .edit-field {
+  margin-bottom: 0;
+}
+
+/* Field Row - Horizontal Layout */
+.edit-field-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.edit-field-row > .edit-field {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Gap between label and input/select/textarea */
+.form-label + .edit-input,
+.form-label + .edit-select,
+.form-label + .edit-textarea,
+.form-label + .edit-input-with-lang,
+.form-label + .edit-currency-input,
+.form-label + .edit-toggle-group {
+  margin-top: 8px;
+}
+
+/* Sublabel spacing: label → sublabel → control */
+.form-label + .edit-sublabel {
+  margin-top: 4px;
+}
+
+.edit-sublabel + .edit-select,
+.edit-sublabel + .edit-input,
+.edit-sublabel + .edit-textarea {
+  margin-top: 8px;
+}
+
+.form-label-group {
+  margin-bottom: 8px;
+}
+
+.edit-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-field-header + .edit-toggle-group {
+  margin-top: 8px;
+}
+
+/* Unified form label */
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.edit-sublabel {
+  font-size: 14px;
+  color: var(--text-subtle);
+  margin: 0;
+}
+
+.optional-label,
+.edit-optional {
+  font-weight: 400;
+  color: var(--text-subtle);
+}
+
+/* Unified help text (appears after control) */
+.form-help-text {
+  font-size: 14px;
+  color: var(--text-subtle);
+  margin-bottom: 8px;
+}
+
+/* Inputs */
+.edit-input,
+.edit-textarea,
+.edit-select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--field);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.edit-input:focus,
+.edit-textarea:focus,
+.edit-select:focus {
+  outline: none;
+  border-color: var(--border-active);
+  box-shadow: 0 0 0 2px var(--focus);
+}
+
+.edit-input:disabled {
+  background-color: var(--surface-low);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.edit-textarea {
+  resize: vertical;
+  line-height: 1.5;
+  min-height: 100px;
+}
+
+.edit-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* Input with Language Selector */
+.edit-input-with-lang {
+  position: relative;
+  display: flex;
+}
+
+.lang-button {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 4px 8px;
+  height: 24px;
+  background-color: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-button:hover {
+  background-color: var(--surface-hover);
+}
+
+.lang-button-textarea {
+  top: 12px;
+  transform: none;
+}
+
+.edit-input-with-lang .edit-input,
+.edit-input-with-lang .edit-textarea {
+  padding-right: 50px;
+}
+
+/* Currency Input */
+.edit-currency-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.edit-currency-prefix {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 8px;
+  background-color: var(--neutral-surface);
+  color: var(--neutral-text);
+  border: 1px solid var(--neutral-border);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  pointer-events: none;
+}
+
+.edit-input-currency {
+  padding-left: 58px;
+}
+
+/* Status Dropdown */
+.status-dropdown-wrapper {
+  position: relative;
+}
+
+.status-dropdown-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.status-dropdown-button:hover {
+  opacity: 0.9;
+}
+
+.edit-status-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.edit-status-option {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.edit-status-option:hover {
+  background-color: var(--surface-hover);
+}
+
+/* Upload Button */
+.edit-upload-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px dashed var(--border);
+  border-radius: 4px;
+  background-color: var(--surface-low);
+  color: var(--text-placeholder);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 100px;
+}
+
+.edit-upload-button:hover {
+  border-color: var(--border-active);
+  background-color: var(--surface-hover);
+  color: var(--text-placeholder);
+}
+
+.edit-upload-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.edit-upload-button p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-placeholder);
+}
+
+.edit-image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 4px;
+}
+
+.edit-image-preview-container {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+}
+
+.edit-image-delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 8px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.edit-image-delete-btn:hover {
+  background: var(--danger-surface);
+  border-color: var(--danger-border);
+}
+
+.edit-image-delete-btn svg {
+  color: var(--danger-text);
+}
+
+.edit-image-delete-btn:hover svg {
+  color: var(--danger-text);
+}
+
+/* Text Actions */
+.edit-text-action {
+  background: none;
+  border: none;
+  color: var(--link);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+
+.edit-text-action:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.edit-text-action-small {
+  background: none;
+  border: none;
+  color: var(--link);
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+/* Bare brand-styled inline buttons */
+.edit-inline-button {
+  background: none;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  color: var(--brand-primary);
+  font-size: 14px;
+  font-weight: 500;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.edit-inline-button:hover {
+  color: var(--brand-primary-hover);
+  background-color: var(--surface-hover);
+}
+
+.edit-text-action-small:hover {
+  color: var(--link-hover);
+  text-decoration: underline;
+}
+
+.edit-expandable-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* Quick Actions */
+.edit-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-separator {
+  color: var(--text-subtle);
+  font-size: 13px;
+}
+
+/* Toggle Buttons */
+.edit-toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.edit-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  min-width: 48px;
+  background-color: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-toggle-button:hover {
+  background-color: var(--surface-hover);
+}
+
+.edit-toggle-button.active {
+  background-color: var(--purple-surface);
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+}
+
+/* Checkbox */
+.edit-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.edit-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: var(--brand-primary);
+}
+
+.edit-checkbox label {
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* Ghost Buttons */
+.edit-ghost-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.edit-ghost-button {
+  padding: 10px 16px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-ghost-button:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--border-active);
+}
+
+/* Right Column: Preview */
+.edit-modal-preview {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  height: fit-content;
+  align-self: start;
+}
+
+/* Preview Card */
+.preview-card {
+  width: 300px;
+  background: var(--surface);
+  border: 2px solid var(--purple-purple-500);
+  border-radius: 8px;
+  overflow: visible;
+  position: relative;
+  box-shadow: 0 0 12px rgba(159, 96, 241, 0.2);
+}
+
+.preview-card-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--purple-purple-100);
+  color: var(--purple-purple-700);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  border: 1px solid var(--purple-purple-300);
+  box-shadow: 0 2px 4px rgba(159, 96, 241, 0.2);
+  z-index: 1;
+}
+
+.preview-card-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--surface-low);
+  border-radius: 6px 6px 0 0;
+}
+
+.preview-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-card-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-subtle);
+}
+
+.preview-card-content {
+  padding: 12px;
+}
+
+.preview-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0 0 4px 0;
+}
+
+.preview-card-tagline {
+  font-size: 14px;
+  color: var(--text-subtle);
+  margin: 0 0 16px 0;
+  line-height: 1.5;
+}
+
+.preview-card-price {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.preview-price-current {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.preview-price-original {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-subtle);
+  text-decoration: line-through;
+}
+
+.preview-discount-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  background-color: var(--orange-surface);
+  color: var(--orange-text);
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.preview-tax-info {
+  font-size: 14px;
+  color: var(--text-subtle);
+}
+
+.preview-actions-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0;
+}
+
+.preview-actions-link {
+  font-size: 12px;
+  color: var(--link);
+  font-family: 'IBM Plex Sans', monospace;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* Preview Actions */
+.preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-raised);
+  padding: 12px;
+}
+
+.preview-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.preview-action-button:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--border-active);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .edit-modal-container {
+    max-width: 100%;
+  }
+
+  .edit-modal-body-wrapper {
+    grid-template-columns: 1fr 280px;
+    gap: 16px;
+  }
+
+  .edit-modal-body {
+    width: 100%;
+  }
+
+  .edit-modal-preview {
+    width: 280px;
+  }
+
+  .preview-card {
+    width: 280px;
+  }
+}
+
+/* Social Share Dropdown */
+.social-share-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.social-share-options {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.social-share-options.hidden {
+  display: none;
+}
+
+.social-option {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: left;
+}
+
+.social-option:last-child {
+  border-bottom: none;
+}
+
+.social-option:hover {
+  background-color: var(--surface-hover);
+}
+
+@media (max-width: 768px) {
+  .edit-modal-container {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .edit-modal-body-wrapper {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+
+  .edit-modal-body {
+    width: 100%;
+  }
+
+  .edit-modal-preview {
+    width: 100%;
+    position: static;
+  }
+
+  .preview-card {
+    width: 100%;
+  }
+
+  .edit-field-row {
+    flex-direction: column;
+  }
+}
