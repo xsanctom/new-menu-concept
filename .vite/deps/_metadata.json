@@ -7,19 +7,19 @@
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "dbcb87f4",
+      "fileHash": "14291514",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "3962fcc1",
+      "fileHash": "caa7e7a3",
       "needsInterop": true
     }
   },
   "chunks": {
-    "chunk-BUSYA2B4": {
-      "file": "chunk-BUSYA2B4.js"
+    "chunk-GFWMZNU4": {
+      "file": "chunk-GFWMZNU4.js"
     }
   }
 }

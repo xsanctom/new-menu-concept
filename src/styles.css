@@ -1670,8 +1670,8 @@ html, body {
 .cell-column {
     display: flex;
     align-items: center;
-    min-width: 120px;
-    max-width: 200px;
+    width: 140px;           /* Changed from min/max to fixed width */
+    flex-shrink: 0;         /* Prevent shrinking */
     font-size: 14px;
     color: var(--text);
 }
@@ -1679,8 +1679,8 @@ html, body {
 .cell-column-wide {
     display: flex;
     align-items: center;
-    min-width: 120px;
-    max-width: 300px;
+    width: 260px;           /* Increased from 200px to fit all day chips */
+    flex-shrink: 0;         /* Prevent shrinking */
     font-size: 14px;
     color: var(--text);
 }
@@ -1877,7 +1877,7 @@ html, body {
 .chip-row {
   display: flex;
   gap: 4px; /* Gap between individual chips */
-  flex-wrap: wrap;
+  flex-wrap: nowrap;        /* Changed from wrap to nowrap - prevents line breaks */
 }
 
 /* Day chips */
