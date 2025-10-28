@@ -105,6 +105,13 @@ function MenuCardGrid() {
                 <div className="chip-row">
                   {(() => {
                     const meals = Array.isArray(item.meals) ? item.meals : [item.meals];
+                    const allMeals = ['All', 'Breakfast', 'Lunch', 'Dinner', 'Brunch'];
+                    const hasAllMeals = allMeals.every(meal => meals.includes(meal));
+                    
+                    if (hasAllMeals) {
+                      return <span className="chip-meal">All Meals</span>;
+                    }
+                    
                     const mealAbbrev = (meal) => {
                       return meal; // Display full meal names
                     };
@@ -120,6 +127,13 @@ function MenuCardGrid() {
                 <div className="chip-row">
                   {(() => {
                     const days = Array.isArray(item.days) ? item.days : [item.days];
+                    const allDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+                    const hasAllDays = allDays.every(day => days.includes(day));
+                    
+                    if (hasAllDays) {
+                      return <span className="chip-day">All Days</span>;
+                    }
+                    
                     const dayAbbrev = (day) => {
                       const abbrevs = { 'Sunday': 'Su', 'Monday': 'M', 'Tuesday': 'Tu', 'Wednesday': 'W', 'Thursday': 'Th', 'Friday': 'F', 'Saturday': 'Sa' };
                       return abbrevs[day] || day.slice(0, 2);
