@@ -789,6 +789,7 @@ html, body {
     color: var(--text);
     font-family: 'IBM Plex Sans', sans-serif;
     outline: none;
+    box-sizing: border-box;
     -moz-appearance: textfield;
     appearance: textfield;
 }
@@ -801,7 +802,10 @@ html, body {
 }
 
 .quantity-calendar-table td.date-cell input[type="number"] {
-    padding: 0;
+    padding: 8px;
+    height: 100%;
+    box-sizing: border-box;
+    min-height: 40px;
 }
 
 /* Hide spinner buttons - Webkit (Chrome, Safari, Edge) */
@@ -4212,7 +4216,7 @@ input:focus-visible,
 }
 
 .quantity-calendar-table td.date-cell {
-    padding: 4px;
+    padding: 0;
 }
 
 .quantity-calendar-table td.saturday {
@@ -4234,6 +4238,7 @@ input:focus-visible,
     color: var(--text);
     font-family: 'IBM Plex Sans', sans-serif;
     outline: none;
+    box-sizing: border-box;
     -moz-appearance: textfield;
     appearance: textfield;
 }
@@ -4246,7 +4251,10 @@ input:focus-visible,
 }
 
 .quantity-calendar-table td.date-cell input[type="number"] {
-    padding: 0;
+    padding: 8px;
+    height: 100%;
+    box-sizing: border-box;
+    min-height: 40px;
 }
 
 /* Hide spinner buttons - Webkit (Chrome, Safari, Edge) */
